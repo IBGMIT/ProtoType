@@ -22,35 +22,35 @@ const styles = StyleSheet.create({
     input: { borderWidth: 1, flex: 1 },
 });
 
-export default class AddCar extends React.Component {
+export default class AddActivity extends React.Component {
     state = {
-        brand: '',
-        model: '',
-        year: '',
-        licensePlate: '',
+        price: '',
+        activity: '',
+        header: '',
+        description: '',
     };
 
-    handleBrandChange = text => this.setState({ brand: text });
+    handleBrandChange = text => this.setState({ price: text });
 
-    handleModelChange = text => this.setState({ model: text });
+    handleModelChange = text => this.setState({ activity: text });
 
-    handleYearChange = text => this.setState({ year: text });
+    handleYearChange = text => this.setState({ header: text });
 
-    handleLicensePlateChange = text => this.setState({ licensePlate: text });
+    handleLicensePlateChange = text => this.setState({ description: text });
 
     handleSave = () => {
-        const { brand, model, year, licensePlate } = this.state;
+        const { price, activity, header, description } = this.state;
         try {
             const reference = firebase
                 .database()
-                .ref('/Cars/')
-                .push({ brand, model, year, licensePlate });
+                .ref('/city/')
+                .push({ price, activity, header, description });
             Alert.alert(`Saved`);
             this.setState({
-                brand: '',
-                model: '',
-                year: '',
-                licensePlate: '',
+                price: '',
+                activity: '',
+                header: '',
+                description: '',
             });
         } catch (error) {
             Alert.alert(`Error: ${error.message}`);
@@ -58,43 +58,43 @@ export default class AddCar extends React.Component {
     };
 
     render() {
-        const { brand, model, year, licensePlate } = this.state;
+        const { price, activity, header, description } = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <ScrollView>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Brand</Text>
+                        <Text style={styles.label}>Price</Text>
                         <TextInput
-                            value={brand}
+                            value={price}
                             onChangeText={this.handleBrandChange}
                             style={styles.input}
                         />
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Model</Text>
+                        <Text style={styles.label}>Activity</Text>
                         <TextInput
-                            value={model}
+                            value={activity}
                             onChangeText={this.handleModelChange}
                             style={styles.input}
                         />
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Year</Text>
+                        <Text style={styles.label}>Header</Text>
                         <TextInput
-                            value={year}
+                            value={header}
                             onChangeText={this.handleYearChange}
                             style={styles.input}
                         />
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>License Plate</Text>
+                        <Text style={styles.label}>Description</Text>
                         <TextInput
-                            value={licensePlate}
+                            value={description}
                             onChangeText={this.handleLicensePlateChange}
                             style={styles.input}
                         />
                     </View>
-                    <Button title="Add car" onPress={this.handleSave} />
+                    <Button title="Add activity" onPress={this.handleSave} />
                 </ScrollView>
             </SafeAreaView>
         );

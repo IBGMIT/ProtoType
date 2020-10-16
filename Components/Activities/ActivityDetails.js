@@ -23,22 +23,22 @@ const styles = StyleSheet.create({
     value: { flex: 1 },
 });
 
-export default class CarDetails extends React.Component {
-    state = { car: null };
+export default class ActivityDetails extends React.Component {
+    state = { activity: null };
 
     componentDidMount() {
         // Vi udlæser ID fra navgation parametre og loader bilen når komponenten starter
         const id = this.props.navigation.getParam('id');
-        this.loadCar(id);
+        this.LoadActivity(id);
     }
 
-    loadCar = id => {
+    LoadActivity = id => {
         firebase
             .database()
             // ID fra funktionens argument sættes ind i stien vi læser fra
-            .ref('/Cars/'+id)
+            .ref('/city/'+id)
             .on('value', asds => {
-                this.setState({ car: asds.val() });
+                this.setState({ activity: asds.val() });
             });
     };
 
@@ -46,7 +46,7 @@ export default class CarDetails extends React.Component {
         // Vi navigerer videre til EditCar skærmen og sender ID med
         const { navigation } = this.props;
         const id = navigation.getParam('id');
-        navigation.navigate('EditCar', { id });
+        navigation.navigate('editActivity', { id });
     };
 
     confirmDelete = () => {
@@ -57,7 +57,7 @@ export default class CarDetails extends React.Component {
                 { text: 'Delete', style: 'destructive', onPress: this.handleDelete },
             ]);
         } else {
-            if(confirm('Er du sikker på du vil slette denne bil?')){
+            if(confirm('Er du sikker på du vil slette denne aktivitet?')){
                 this.handleDelete()
             }
         }
@@ -67,26 +67,26 @@ export default class CarDetails extends React.Component {
 
     // Vi sletter den aktuelle bil
     handleDelete = () => {
-            const { navigation } = this.props;
-            const id = navigation.getParam('id');
-            try {
-                firebase
-                    .database()
-                    // Vi sætter bilens ID ind i stien
-                    .ref(`/Cars/${id}`)
-                    // Og fjerner data fra den sti
-                    .remove();
-                // Og går tilbage når det er udført
-                navigation.goBack();
-            } catch (error) {
-                Alert.alert(error.message);
-            }
+        const { navigation } = this.props;
+        const id = navigation.getParam('id');
+        try {
+            firebase
+                .database()
+                // Vi sætter bilens ID ind i stien
+                .ref(`/city/${id}`)
+                // Og fjerner data fra den sti
+                .remove();
+            // Og går tilbage når det er udført
+            navigation.goBack();
+        } catch (error) {
+            Alert.alert(error.message);
+        }
 
     };
 
     render() {
-        const { car } = this.state;
-        if (!car) {
+        const { activty } = this.state;
+        if (!activty) {
             return <Text>No data</Text>;
         }
         return (
@@ -94,20 +94,20 @@ export default class CarDetails extends React.Component {
                 <Button title="Edit" onPress={this.handleEdit} />
                 <Button title="Delete" onPress={this.confirmDelete} />
                 <View style={styles.row}>
-                    <Text style={styles.label}>Brand</Text>
-                    <Text style={styles.value}>{car.brand}</Text>
+                    <Text style={styles.label}>Price</Text>
+                    <Text style={styles.value}>{activty.price}</Text>
                 </View>
                 <View style={styles.row}>
-                    <Text style={styles.label}>Model</Text>
-                    <Text style={styles.value}>{car.model}</Text>
+                    <Text style={styles.label}>Activity</Text>
+                    <Text style={styles.value}>{activty.activity}</Text>
                 </View>
                 <View style={styles.row}>
-                    <Text style={styles.label}>Year</Text>
-                    <Text style={styles.value}>{car.year}</Text>
+                    <Text style={styles.label}>Header</Text>
+                    <Text style={styles.value}>{activty.header}</Text>
                 </View>
                 <View style={styles.row}>
-                    <Text style={styles.label}>License Plate</Text>
-                    <Text style={styles.value}>{car.licensePlate}</Text>
+                    <Text style={styles.label}>Description</Text>
+                    <Text style={styles.value}>{activty.description}</Text>
                 </View>
             </View>
         );

@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     label: { fontWeight: 'bold' },
 });
 
-export default class CarDetails extends React.Component {
+export default class ActivityListItem extends React.Component {
     handlePress = () => {
         // Her pakker vi ting ud fra props
         const {id, onSelect} = this.props
@@ -29,11 +29,11 @@ export default class CarDetails extends React.Component {
     };
 
     render() {
-        const { car } = this.props;
+        const { activity } = this.props;
         return (
             <TouchableOpacity style={styles.container} onPress={this.handlePress}>
                 <Text style={styles.label}>
-                    {car.brand} {car.model}
+                    {activity.price} {activity.header}
                 </Text>
             </TouchableOpacity>
         );

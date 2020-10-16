@@ -22,50 +22,50 @@ const styles = StyleSheet.create({
     input: { borderWidth: 1, flex: 1 },
 });
 
-export default class EditCar extends React.Component {
+export default class EditActivity extends React.Component {
     state = {
-        brand: '',
-        model: '',
-        year: '',
-        licensePlate: '',
+        price: '',
+        activity: '',
+        header: '',
+        description: '',
     };
 
     componentDidMount() {
         const id = this.props.navigation.getParam('id');
-        this.loadCar(id);
+        this.loadActivity(id);
     }
 
     // Her loader vi bilens data ud fra det ID vi får med fra navigationen
-    loadCar = id => {
+    loadActivity = id => {
         firebase
             .database()
-            .ref('/Cars/'+id)
+            .ref('/city/'+id)
             .once('value', dataObject => {
-                const car = dataObject.val();
-                const { brand, model, year, licensePlate } = car;
-                this.setState({ brand, model, year, licensePlate });
+                const activity1 = dataObject.val();
+                const { price, activity, header, description } = activity1;
+                this.setState({ price, activity, header, description});
             });
     };
 
-    handleBrandChange = text => this.setState({ brand: text });
+    handleBrandChange = text => this.setState({ price: text });
 
-    handleModelChange = text => this.setState({ model: text });
+    handleModelChange = text => this.setState({ activity: text });
 
-    handleYearChange = text => this.setState({ year: text });
+    handleYearChange = text => this.setState({ header: text });
 
-    handleLicensePlateChange = text => this.setState({ licensePlate: text });
+    handleLicensePlateChange = text => this.setState({ description: text });
 
     updateData = () => {
         // Vi bruger this.props.navigation flere steder så vi pakker den ud én gang for alle
         const { navigation } = this.props;
-        const { brand, model, year, licensePlate } = this.state;
+        const { price, activity, header, description } = this.state;
         const id = navigation.getParam('id');
         try {
-           firebase
+            firebase
                 .database()
-                .ref(`/Cars/${id}`)
+                .ref(`/city/${id}`)
                 // Vi bruger update, så kun de felter vi angiver, bliver ændret
-                .update({ brand, model, year, licensePlate });
+                .update({ price, activity, header, description });
             // Når bilen er ændret, går vi tilbage.
             Alert.alert("Din info er nu opdateret");
             navigation.goBack();
@@ -75,38 +75,38 @@ export default class EditCar extends React.Component {
     };
 
     render() {
-        const { brand, model, year, licensePlate } = this.state;
+        const { price, activity, header, description } = this.state;
         return (
             <View style={styles.container}>
                 <ScrollView>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Brand</Text>
+                        <Text style={styles.label}>Price</Text>
                         <TextInput
-                            value={brand}
+                            value={price}
                             onChangeText={this.handleBrandChange}
                             style={styles.input}
                         />
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Model</Text>
+                        <Text style={styles.label}>Activity</Text>
                         <TextInput
-                            value={model}
+                            value={activity}
                             onChangeText={this.handleModelChange}
                             style={styles.input}
                         />
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Year</Text>
+                        <Text style={styles.label}>Header</Text>
                         <TextInput
-                            value={year}
+                            value={header}
                             onChangeText={this.handleYearChange}
                             style={styles.input}
                         />
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>License Plate</Text>
+                        <Text style={styles.label}>Description</Text>
                         <TextInput
-                            value={licensePlate}
+                            value={description}
                             onChangeText={this.handleLicensePlateChange}
                             style={styles.input}
                         />
